@@ -1,0 +1,19 @@
+[general]
+
+secret: mysecretkey
+file_log: /home/tgouverneur/git/snippet/logs/audit.log
+listen_port: 7080
+listen_host: 0.0.0.0
+debug_mode: True
+smtpServer: smtp.vpn.espix.org
+destAddress: thomas@espix.net
+licensedStore: /home/tgo/efsSnippet/store
+
+mongoHost: localhost
+mongoPort: 27017
+mongoUsername: snippet
+mongoPassword: snippetPass
+mongoDatabase: snippet
+
+smtpServer: smtp.test.com
+mailFrom: snippet@test.com

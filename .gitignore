@@ -1,0 +1,18 @@
+# Virtualenv
+.Python
+bin
+lib
+include
+pip-selfcheck.json
+*.pyc
+*.pem
+config.ini
+*.pp
+*.log
+*~
+local/
+store/
+static/ts
+lib64
+share/
+pyvenv.cfg

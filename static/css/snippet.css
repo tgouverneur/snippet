@@ -1,0 +1,13 @@
+body {
+  padding-top: 5rem;
+}
+
+.btn-create {
+    background-color: #8a00e6;
+    color: #fff;
+}
+
+pre {
+    background-color: #d0d3d1;
+    padding: 5px;
+}

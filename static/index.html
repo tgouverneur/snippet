@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="expires" content="Mon, 02 Jul 2001 06:00:00 GMT"/>
+        <meta http-equiv="pragma" content="no-cache" />
+        <link id='dynamic-favicon' rel='shortcut icon' type='image/png' href='./img/blank_favicon.ico'>
+        <!-- Boostrap CSS -->
+        <link href='/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+        <link href='/css/snippet.css' rel='stylesheet' type='text/css'>
+        <title>Secure Snippet - Creation</title>
+   </head>
+    <body>
+
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#">Secure Snippet</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Create <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/statistics.html">Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about.html">About</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="container">
+
+            <div class="page-header">
+                <h1>Create Snippet</h1>
+                <div id="snippetBox" class="alert alert-success" style="display: none" role="alert">
+                    <h4 class="alert-heading">Snippet Created!</h4>
+                    <p>The snippet you requested has been created. Please remember that once viewed, the content will disappear from our database. Also, if you loose the link below, it will be impossible to recover the content of the snippet and it will expire from our database after 30 days.</p>
+                    <hr>
+                    <p>
+                    <p>Your snippet unique link is: <a id="snippetLink" href=""></a></p>
+                </div>
+                <div id="msgError" class="alert alert-danger" style="display: none" role="alert">
+                </div>
+            </div>
+                
+            <div id="createForm">
+
+                <div class="row was-validated">
+                    <div class="form-group col-md-12">
+                        <label for=inputContent">Insert the content of the snippet below</label>
+                        <textarea class="form-control is-invalid" style="height: 50vh;" id="content" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" required></textarea>
+                        <div class="invalid-feedback">
+                            Please add text to your snippet
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="advancedInput" style="display: none;">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input type="checkbox" id="snippet_isRaw" class="form-check-input">
+                            <label for="snippet_isRaw" class="form-check-label pl-2">Is the content unformatted?</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="snippet_confirm" class="form-check-input">
+                            <label for="snippet_confirm" class="form-check-label pl-2">Send email confirmation?</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="snippet_reference" placeholder="Reference">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input type="email" class="form-control" id="snippet_email" placeholder="Email">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-between pt-3">
+                    <div class="form-group col-md-2">
+                        <input class="btn btn-sm btn-block btn-primary btn-create" type="button" onClick="snippetSubmit();" value="Create" />
+                    </div>
+                    <div class="col-md-2 custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" onClick="toggleAdvancedMode();" id="advancedMode">
+                        <label class="custom-control-label" for="advancedMode">Advanced Mode</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="footer" class="row">
+                <div class="col-md-12">
+                    <hr>
+                    <footer>Powered by <a href="https://github.com/tgouverneur/snippet">Secure Snippet</a> from <a href="https://espix.net">Espix Network</a></footer>
+                </div>
+            </div>
+        </main>
+    </body>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/snippet.js"></script>
+</html>
