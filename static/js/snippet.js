@@ -73,7 +73,7 @@ function snippetSubmit() {
     }
     url = null;
     if (opts['isFile']) {
-        var file = $('#inputFile').files[0];
+        var file = $('#inputFile')[0].files;
         if (file.length != 1) {
             $('#msgError').text('You should select a file while in File Mode!');
             $('#msgError').show();
@@ -118,7 +118,7 @@ function snippetSubmit() {
                 }
             });
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file[0]);
         return;
     } else {
         if (opts['content'] == '') {
