@@ -170,9 +170,11 @@ function getSnippet() {
 
 function toggleFileMode() {
     if ($('#fileMode').prop('checked')) {
+        $('#contentInput').hide();
         $('#fileInput').show();
     } else {
         $('#fileInput').hide();
+        $('#contentInput').show();
     }
 }
 
