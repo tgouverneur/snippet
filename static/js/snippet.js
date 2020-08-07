@@ -80,7 +80,7 @@ function snippetSubmit() {
             $('#msgError').show();
             return;
         }
-        opts['name'] = file.name;
+        opts['name'] = file[0].name;
         var reader = new FileReader();
         reader.onerror = function(error) {
             $('#msgError').text(data.error);
