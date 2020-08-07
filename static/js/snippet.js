@@ -73,7 +73,7 @@ function snippetSubmit() {
     }
     url = null;
     if (opts['isFile']) {
-        var file = $('#inputFile')[0].files;
+        var file = $('#inputFile').files[0];
         if (file.length != 1) {
             $('#msgError').text('You should select a file while in File Mode!');
             $('#msgError').show();
