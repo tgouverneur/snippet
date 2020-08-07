@@ -73,7 +73,7 @@ function snippetSubmit() {
             $('#msgError').show();
             return;
         }
-        var fd = FormData();
+        var fd = new FormData();
         fd.append('file', file[0])
         opts['file'] = fd['file'];
     } else {
