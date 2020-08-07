@@ -33,6 +33,15 @@ function loadSnippetPage() {
 }
 
 /*
+ * Base64-ify
+ */
+function getBase64(file) {
+   var reader = new FileReaderSync();
+   reader.readAsDataURL(file);
+   return reader.result;
+}
+
+/*
  * Submit snippet to API for creation.
  */
 function snippetSubmit() {
@@ -42,6 +51,7 @@ function snippetSubmit() {
     opts = {};
     opts['content'] = $('#content').val();
     opts['isRaw'] = 0;
+    opts['isFile'] = 0;
     opts['isConfirm'] = 0;
     opts['email'] = '';
     opts['reference'] = '';
@@ -62,10 +72,20 @@ function snippetSubmit() {
     if ($('#snippet_confirm').prop('checked')) {
         opts['isConfirm'] = 1;
     }
-    if (opts['content'] == '') {
-        $('#msgError').text('You should fill the snippet!');
-        $('#msgError').show();
-        return;
+    if (opts['isFile']) {
+        var file = $('#file')[0].files;
+        if (file.length != 1) {
+            $('#msgError').text('You should select a file while in File Mode!');
+            $('#msgError').show();
+            return;
+        }
+        opts['file'] = getBase64(file[0]);
+    } else {
+        if (opts['content'] == '') {
+            $('#msgError').text('You should fill the snippet!');
+            $('#msgError').show();
+            return;
+        }
     }
     if (opts['isConfirm'] == 1 && (opts['email'] == '' || opts['reference'] == '')) {
         $('#msgError').text('Email and Reference must be filled if you want read confirmation.');
@@ -146,6 +166,14 @@ function getSnippet() {
             $('#header').hide();
         }
     });
+}
+
+function toggleFileMode() {
+    if ($('#fileMode').prop('checked')) {
+        $('#fileInput').show();
+    } else {
+        $('#fileInput').hide();
+    }
 }
 
 function toggleAdvancedMode() {
