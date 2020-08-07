@@ -45,6 +45,7 @@ function snippetSubmit() {
     opts['isFile'] = 0;
     opts['isConfirm'] = 0;
     opts['email'] = '';
+    opts['name'] = '';
     opts['reference'] = '';
     if ($('#snippet_reference').val() != '') {
         opts['reference'] = $('#snippet_reference').val();
@@ -79,6 +80,7 @@ function snippetSubmit() {
             $('#msgError').show();
             return;
         }
+        opts['name'] = file.name;
         var reader = new FileReader();
         reader.onerror = function(error) {
             $('#msgError').text(data.error);

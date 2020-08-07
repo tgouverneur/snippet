@@ -35,6 +35,7 @@ class spxSnippet(spxMongoObject):
             'content': 'content',
             'reference': 'reference',
             'email': 'email',
+            'name': 'name',
             'createdBy': 'createdBy',
             'isRaw': 'isRaw',
             'isFile': 'isFile',
@@ -53,6 +54,7 @@ class spxSnippet(spxMongoObject):
         self.isFile = False
         self.isConfirm = False
         self.email = ''
+        self.name = ''
         self.reference = ''
         self.created = created
         if self.created is None:
@@ -192,6 +194,9 @@ class spxSnippet(spxMongoObject):
             if d['isFile'] is True or d['isFile'] == 'True' or d['isFile'] == 1:
                 self.isFile = True
 
+        if 'name' in d:
+            self.name = d['name']
+
         self.content = d['content']
 
         self.createdBy = d['createdBy']
@@ -207,6 +212,7 @@ class spxSnippet(spxMongoObject):
         rs['created'] = self.created
         rs['isRaw'] = self.isRaw
         rs['isFile'] = self.isFile
+        rs['name'] = self.name
         if isBck == True:
             rs['isConfirm'] = self.isConfirm
             rs['email'] = self.email
