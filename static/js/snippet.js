@@ -33,15 +33,6 @@ function loadSnippetPage() {
 }
 
 /*
- * Base64-ify
- */
-function getBase64(file) {
-   var reader = new FileReaderSync();
-   reader.readAsDataURL(file);
-   return reader.result;
-}
-
-/*
  * Submit snippet to API for creation.
  */
 function snippetSubmit() {
@@ -82,7 +73,9 @@ function snippetSubmit() {
             $('#msgError').show();
             return;
         }
-        opts['file'] = getBase64(file[0]);
+        var fd = FormData();
+        fd.append('file', file[0])
+        opts['file'] = fd['file'];
     } else {
         if (opts['content'] == '') {
             $('#msgError').text('You should fill the snippet!');
