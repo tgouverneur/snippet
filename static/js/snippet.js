@@ -66,6 +66,9 @@ function snippetSubmit() {
             return;
         }
     }
+    if ($('#fileMode').prop('checked')) {
+        opts['isFile'] = 1;
+    }
     if ($('#snippet_isRaw').prop('checked')) {
         opts['isRaw'] = 1;
     }
