@@ -193,7 +193,7 @@ function getSnippet() {
                         var blob = base64ToBlob(data['content'], 'application/octet-stream');
                         var url = window.URL.createObjectURL(blob);
                         a.href = url;
-                        a.download = result.download.filename;
+                        a.download = data['name'];
                         a.click();
                         window.URL.revokeObjectURL(url);
                     } else {
