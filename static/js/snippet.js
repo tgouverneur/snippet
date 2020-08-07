@@ -66,6 +66,12 @@ function snippetSubmit() {
     if ($('#snippet_confirm').prop('checked')) {
         opts['isConfirm'] = 1;
     }
+    if (opts['isConfirm'] == 1 && (opts['email'] == '' || opts['reference'] == '')) {
+        $('#msgError').text('Email and Reference must be filled if you want read confirmation.');
+        $('#msgError').show();
+        return;
+    }
+    url = null;
     if (opts['isFile']) {
         var file = $('#inputFile')[0].files;
         if (file.length != 1) {
@@ -73,7 +79,47 @@ function snippetSubmit() {
             $('#msgError').show();
             return;
         }
-        opts['file'] = btoa(file[0].stream())
+        var reader = new FileReader();
+        reader.onerror = function(error) {
+            $('#msgError').text(data.error);
+            $('#msgError').show();
+            return;
+        };
+        reader.onload = function() {
+            opts['file'] = reader.result;
+            $.ajax({
+                type: 'POST',
+                url: '/api/snippet',
+                data: JSON.stringify(opts),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(data){
+                    if (data.rc < 0) {
+                        $('#msgError').text(data.error);
+                        $('#msgError').show();
+                    } else {
+                        link = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '') + '/view.html#' + data['id'] + '-' + data['key'];
+                        $('#msgError').hide();
+                        $('#snippetLink').attr('href', link);
+                        $('#snippetLink').text(link);
+                        $('#snippetBox').show();
+                        $('#createForm').hide();
+                    }
+                },
+                statusCode: {
+                    500: function() {
+                        $('#msgError').text('The server encountered a fatal error, please contact administrator');
+                        $('#msgError').show();
+                    }
+                },
+                failure: function(errMsg) {
+                    $('#msgError').text(errMsg);
+                    $('#msgError').show();
+                }
+            });
+        };
+        reader.readAsDataURL(file);
+        return;
     } else {
         if (opts['content'] == '') {
             $('#msgError').text('You should fill the snippet!');
@@ -81,12 +127,6 @@ function snippetSubmit() {
             return;
         }
     }
-    if (opts['isConfirm'] == 1 && (opts['email'] == '' || opts['reference'] == '')) {
-        $('#msgError').text('Email and Reference must be filled if you want read confirmation.');
-        $('#msgError').show();
-        return;
-    }
-    url = null;
     $.ajax({
         type: 'POST',
         url: '/api/snippet',
