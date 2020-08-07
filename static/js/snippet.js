@@ -73,9 +73,7 @@ function snippetSubmit() {
             $('#msgError').show();
             return;
         }
-        var fd = new FormData();
-        fd.append('file', file[0])
-        opts['file'] = fd['file'];
+        opts['file'] = btoa(file[0])
     } else {
         if (opts['content'] == '') {
             $('#msgError').text('You should fill the snippet!');
