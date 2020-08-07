@@ -33,7 +33,6 @@ class spxSnippet(spxMongoObject):
     _attrs = {
             'id': '_id',
             'content': 'content',
-            'file': 'file',
             'reference': 'reference',
             'email': 'email',
             'createdBy': 'createdBy',
@@ -54,7 +53,6 @@ class spxSnippet(spxMongoObject):
         self.isFile = False
         self.isConfirm = False
         self.email = ''
-        self.file = ''
         self.reference = ''
         self.created = created
         if self.created is None:
