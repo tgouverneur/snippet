@@ -43,7 +43,13 @@ class spxSnippetHandler(MethodView):
         sp = spxSnippet()
         try:
             sp.dictToObj(p)
-            sp.stripXSS()
+
+            if sp.isFile:
+                sp.stripFile()
+            else:
+                sp.isRaw = False
+                sp.stripXSS()
+
             sp.encrypt()
         except spxException as e:
             ret = {'rc': e.rc, 'error': e.msg}

@@ -33,6 +33,7 @@ class spxSnippet(spxMongoObject):
     _attrs = {
             'id': '_id',
             'content': 'content',
+            'file': 'file',
             'reference': 'reference',
             'email': 'email',
             'createdBy': 'createdBy',
@@ -53,6 +54,7 @@ class spxSnippet(spxMongoObject):
         self.isFile = False
         self.isConfirm = False
         self.email = ''
+        self.file = ''
         self.reference = ''
         self.created = created
         if self.created is None:
@@ -102,6 +104,16 @@ class spxSnippet(spxMongoObject):
         with smtplib.SMTP(smtp_addr) as smtp:
             smtp.sendmail(mail_from, self.email, msg.as_string())
             smtp.quit()
+
+    def stripFile(self):
+        """ should remove: data:*/*;base64, from the begining of the field """
+        tmp = self.content.split(',', 1)
+
+        if len(tmp) != 2:
+            raise spxException(rc=-6, msg='File format incorrect')
+
+        self.content = tmp[1]
+
 
     def stripXSS(self):
         x = XssCleaner(remove_all=self.isRaw)
@@ -178,7 +190,12 @@ class spxSnippet(spxMongoObject):
             else:
                 self.reference = d['reference']
 
+        if 'isFile' in d:
+            if d['isFile'] is True or d['isFile'] == 'True' or d['isFile'] == 1:
+                self.isFile = True
+
         self.content = d['content']
+
         self.createdBy = d['createdBy']
 
 

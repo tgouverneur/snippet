@@ -86,7 +86,7 @@ function snippetSubmit() {
             return;
         };
         reader.onload = function() {
-            opts['file'] = reader.result;
+            opts['content'] = reader.result;
             $.ajax({
                 type: 'POST',
                 url: '/api/snippet',
