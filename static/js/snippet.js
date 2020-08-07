@@ -73,7 +73,7 @@ function snippetSubmit() {
             $('#msgError').show();
             return;
         }
-        opts['file'] = btoa(file[0].getAsBinary())
+        opts['file'] = btoa(file[0].stream())
     } else {
         if (opts['content'] == '') {
             $('#msgError').text('You should fill the snippet!');
