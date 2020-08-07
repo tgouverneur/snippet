@@ -184,14 +184,32 @@ function getSnippet() {
                 $('#msgError').show();
                 $('#snippetButton').hide();
             } else {
-                if (data['isRaw']) {
-                    content = '<pre>' + data['content'] + '</pre>';
+                if (data['isFile']) {
+                    var a = document.createElement('a');
+                    if (window.URL && window.Blob && ('download' in a) && window.atob) {
+                        // Do it the HTML5 compliant way
+                        var blob = base64ToBlob(data['content'], 'application/octet-stream');
+                        var url = window.URL.createObjectURL(blob);
+                        a.href = url;
+                        a.download = result.download.filename;
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    } else {
+                        $('#msgError').text('Your browser is too old.. and unfortunately the data is lost.');
+                        $('#msgError').show();
+                        $('#snippetButton').hide();
+                        return;
+                    }
                 } else {
-                    content = data['content'];
+                    if (data['isRaw']) {
+                        content = '<pre>' + data['content'] + '</pre>';
+                    } else {
+                        content = data['content'];
+                    }
+                    $('#snippet').html(content);
+                    $('#snippet').show();
+                    $('#snippetButton').hide();
                 }
-                $('#snippet').html(content);
-                $('#snippet').show();
-                $('#snippetButton').hide();
             }
         },
         failure: function(errMsg) {
@@ -228,3 +246,26 @@ function isEmail(email) {
     return regex.test(email);
 }
 
+/**
+ * base64ToBlob
+ */
+function base64ToBlob(base64, mimetype, slicesize) {
+    if (!window.atob || !window.Uint8Array) {
+        // The current browser doesn't have the atob function. Cannot continue
+        return null;
+    }
+    mimetype = mimetype || '';
+    slicesize = slicesize || 512;
+    var bytechars = atob(base64);
+    var bytearrays = [];
+    for (var offset = 0; offset < bytechars.length; offset += slicesize) {
+        var slice = bytechars.slice(offset, offset + slicesize);
+        var bytenums = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            bytenums[i] = slice.charCodeAt(i);
+        }
+        var bytearray = new Uint8Array(bytenums);
+        bytearrays[bytearrays.length] = bytearray;
+    }
+    return new Blob(bytearrays, {type: mimetype});
+}

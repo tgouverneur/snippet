@@ -106,6 +106,9 @@ class spxSnippet(spxMongoObject):
     def stripFile(self):
         """ should remove: data:*/*;base64, from the begining of the field """
         tmp = self.content.split(',', 1)
+        # Fetch MIME
+        mime = tmp[0]
+        mime = mime.split(':', 1)
 
         if len(tmp) != 2:
             raise spxException(rc=-6, msg='File format incorrect')
