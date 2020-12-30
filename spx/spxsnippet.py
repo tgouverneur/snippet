@@ -35,8 +35,10 @@ class spxSnippet(spxMongoObject):
             'content': 'content',
             'reference': 'reference',
             'email': 'email',
+            'name': 'name',
             'createdBy': 'createdBy',
             'isRaw': 'isRaw',
+            'isFile': 'isFile',
             'isConfirm': 'isConfirm',
             'created': 'created',
             }
@@ -49,8 +51,10 @@ class spxSnippet(spxMongoObject):
         self.content = content
         self.createdBy = createdBy
         self.isRaw = False
+        self.isFile = False
         self.isConfirm = False
         self.email = ''
+        self.name = ''
         self.reference = ''
         self.created = created
         if self.created is None:
@@ -100,6 +104,16 @@ class spxSnippet(spxMongoObject):
         with smtplib.SMTP(smtp_addr) as smtp:
             smtp.sendmail(mail_from, self.email, msg.as_string())
             smtp.quit()
+
+    def stripFile(self):
+        """ should remove: data:*/*;base64, from the begining of the field """
+        tmp = self.content.split(',', 1)
+
+        if len(tmp) != 2:
+            raise spxException(rc=-6, msg='File format incorrect')
+
+        self.content = tmp[1]
+
 
     def stripXSS(self):
         x = XssCleaner(remove_all=self.isRaw)
@@ -152,6 +166,7 @@ class spxSnippet(spxMongoObject):
             raise spxException(rc=-1, msg='createdBy not provided')
 
         self.isRaw = False
+        self.isFile = False
         self.isConfirm = False
 
         if 'isConfirm' in d:
@@ -175,7 +190,15 @@ class spxSnippet(spxMongoObject):
             else:
                 self.reference = d['reference']
 
+        if 'isFile' in d:
+            if d['isFile'] is True or d['isFile'] == 'True' or d['isFile'] == 1:
+                self.isFile = True
+
+        if 'name' in d:
+            self.name = d['name']
+
         self.content = d['content']
+
         self.createdBy = d['createdBy']
 
 
@@ -188,6 +211,8 @@ class spxSnippet(spxMongoObject):
         """ rs['createdBy'] = self.createdBy we don't want to disclose who has created the snippet """
         rs['created'] = self.created
         rs['isRaw'] = self.isRaw
+        rs['isFile'] = self.isFile
+        rs['name'] = self.name
         if isBck == True:
             rs['isConfirm'] = self.isConfirm
             rs['email'] = self.email
