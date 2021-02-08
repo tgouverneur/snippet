@@ -17,3 +17,5 @@ mongoDatabase: snippet
 
 smtpServer: smtp.test.com
 mailFrom: snippet@test.com
+
+useForwardFor: True
