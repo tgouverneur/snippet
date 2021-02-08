@@ -146,7 +146,7 @@ class spxCleanHandler(MethodView):
 
 
 def findRequestor(request):
-    if spxSnippetHandler.app['FORWARDFOR'] is True and request.headers.getlist("X-Forwarded-For"):
+    if spxSnippetHandler.app['FORWARDFOR'] == 'True' and request.headers.getlist("X-Forwarded-For"):
         return request.headers.getlist('X-Forwarded-For')[0]
     return request.remote_addr
 
