@@ -160,7 +160,7 @@ def init_app(config=None):
         app.config['SECRET_KEY'] = config.get(option='secret')
         app.config['MAIL_FROM'] = config.get(option='mailfrom')
         app.config['SMTP_SERVER'] = config.get(option='smtpserver')
-        app.config['FORWARDFOR'] = config.get(option='useForwardFor')
+        app.config['FORWARDFOR'] = config.get(option='useforwardfor')
         mc = spxMongo()
         mc.setDBHost(config.get(option='mongohost'))
         mc.setDBPort(config.get(option='mongoport'))
