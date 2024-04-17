@@ -73,8 +73,12 @@ class spxSnippet(spxMongoObject):
         return str(self.id)
 
     def __validateEmail(self):
+        if len(self.email) > 1000:
+            return False
+
         if re.fullmatch(r'[^@]+@[^@]+\.[^@]+', self.email):
             return True
+
         return False
 
     def logDenied(self, host):
