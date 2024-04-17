@@ -47,7 +47,6 @@ class spxSnippetHandler(MethodView):
             if sp.isFile:
                 sp.stripFile()
             else:
-                sp.isRaw = False
                 sp.stripXSS()
 
             sp.encrypt()
