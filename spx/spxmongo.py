@@ -84,7 +84,7 @@ class spxMongo(object):
         self._db = None
 
     def isConnected(self):
-        if self._db:
+        if self._db is not None:
             return True
         return False
 

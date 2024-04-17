@@ -13,7 +13,6 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 
 from spx.xss import XssCleaner
-from simplejson import JSONEncoder
 from bson.objectid import ObjectId
 
 from Crypto import Random
@@ -122,8 +121,8 @@ class spxSnippet(spxMongoObject):
     def encrypt(self):
         self.clearKey = randString(32)
         iv = Random.new().read(AES.block_size)
-        cipher = AES.new(self.clearKey, AES.MODE_CFB, iv)
-        cryptbytes = cipher.encrypt(spxSnippet.signature + self.content)
+        cipher = AES.new(self.clearKey.encode('utf-8'), AES.MODE_CFB, iv)
+        cryptbytes = cipher.encrypt(spxSnippet.signature.encode('utf-8') + self.content.encode('utf-8'))
         self.content = base64.b64encode(iv + cryptbytes)
 
         if len(self.email) > 0:
@@ -139,7 +138,7 @@ class spxSnippet(spxMongoObject):
         buf = base64.b64decode(self.content)
         iv = buf[:AES.block_size]
         content = buf[AES.block_size:]
-        cipher = AES.new(key, AES.MODE_CFB, iv)
+        cipher = AES.new(key.encode('utf-8'), AES.MODE_CFB, iv)
         content = cipher.decrypt(content).decode()
         sig = content[:len(spxSnippet.signature)]
 

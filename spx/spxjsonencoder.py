@@ -1,6 +1,6 @@
-import json
 from spx.spxsnippet import spxSnippet
-from simplejson import JSONEncoder
+from json import JSONEncoder
+import json
 
 class spxJSONEncoder(JSONEncoder):
     __types = ( spxSnippet )
