@@ -26,7 +26,7 @@ class spxSnippetHandler(MethodView):
     decorators = []
 
     def findRequestor(self):
-        if self.app['FORWARDFOR'] == 'True' and request.headers.getlist("X-Forwarded-For"):
+        if self.app.config['FORWARDFOR'] == 'True' and request.headers.getlist("X-Forwarded-For"):
             return request.headers.getlist('X-Forwarded-For')[0]
         return request.remote_addr
 
@@ -128,7 +128,7 @@ class spxCleanHandler(MethodView):
     decorators = []
 
     def findRequestor(self):
-        if self.app['FORWARDFOR'] == 'True' and request.headers.getlist("X-Forwarded-For"):
+        if self.app.config['FORWARDFOR'] == 'True' and request.headers.getlist("X-Forwarded-For"):
             return request.headers.getlist('X-Forwarded-For')[0]
         return request.remote_addr
 
@@ -159,6 +159,7 @@ def init_app(config=None):
     app = Flask(__name__)
 
     spxSnippetHandler.app = app
+    spxCleanHandler.app = app
 
     if config is not None:
         app.config['SECRET_KEY'] = config.get(option='secret')
