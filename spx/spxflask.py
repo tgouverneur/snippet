@@ -26,7 +26,7 @@ class spxSnippetHandler(MethodView):
     decorators = []
 
     def findRequestor(self):
-        if self.app['FORWARDFOR'] == 'True' and request.headers.getlist("X-Forwarded-For"):
+        if self.app.config['FORWARDFOR'] == 'True' and request.headers.getlist("X-Forwarded-For"):
             return request.headers.getlist('X-Forwarded-For')[0]
         return request.remote_addr
 
@@ -34,7 +34,7 @@ class spxSnippetHandler(MethodView):
     def post(self):
         ret = None
         if not request.data:
-            spxLogger.logAction('ADD_SNIP', spxSnippetHandler.findRequestor(), 'FAIL')
+            spxLogger.logAction('ADD_SNIP', self.findRequestor(), 'FAIL')
             return Response(json.dumps({'rc': -1, 'error': 'No JSON data provided'}), 200, [('Content-Type', 'application/json')])
 
         mc = getMongo()
@@ -42,10 +42,10 @@ class spxSnippetHandler(MethodView):
         p = json.loads(request.data.decode('utf-8'))
 
         if not p:
-            spxLogger.logAction('ADD_SNIP', spxSnippetHandler.findRequestor(), 'FAIL')
+            spxLogger.logAction('ADD_SNIP', self.findRequestor(), 'FAIL')
             return Response(json.dumps({'rc': -1, 'error': 'Provided data could not be loaded'}), 200, [('Content-Type', 'application/json')])
 
-        p['createdBy'] = str(spxSnippetHandler.findRequestor())
+        p['createdBy'] = str(self.findRequestor())
         sp = spxSnippet()
         try:
             sp.dictToObj(p)
@@ -58,10 +58,10 @@ class spxSnippetHandler(MethodView):
             sp.encrypt()
         except spxException as e:
             ret = {'rc': e.rc, 'error': e.msg}
-            spxLogger.logAction('ADD_SNIP', spxSnippetHandler.findRequestor(), 'FAIL', obj=e)
+            spxLogger.logAction('ADD_SNIP', self.findRequestor(), 'FAIL', obj=e)
         except Exception as e:
             ret = {'rc': -2, 'error': 'Error creating the snippet: '+str(e)}
-            spxLogger.logAction('ADD_SNIP', spxSnippetHandler.findRequestor(), 'FAIL', obj=e)
+            spxLogger.logAction('ADD_SNIP', self.findRequestor(), 'FAIL', obj=e)
 
         if ret is not None:
             return Response(json.dumps(ret), 200, [('Content-Type', 'application/json')])
@@ -75,14 +75,14 @@ class spxSnippetHandler(MethodView):
             ret['id'] = str(sp.id)
         except spxException as e:
             ret = {'rc': e.rc, 'error': e.msg}
-            spxLogger.logAction('ADD_SNIP', spxSnippetHandler.findRequestor(), 'FAIL', obj=e)
+            spxLogger.logAction('ADD_SNIP', self.findRequestor(), 'FAIL', obj=e)
             return Response(json.dumps(ret), 200, [('Content-Type', 'application/json')])
         except Exception as e:
             ret = {'rc': -2, 'error': 'Error adding the snippet into database: '+str(e)}
-            spxLogger.logAction('ADD_SNIP', spxSnippetHandler.findRequestor(), 'FAIL', obj=e)
+            spxLogger.logAction('ADD_SNIP', self.findRequestor(), 'FAIL', obj=e)
             return Response(json.dumps(ret), 200, [('Content-Type', 'application/json')])
 
-        spxLogger.logAction('ADD_SNIP', spxSnippetHandler.findRequestor(), 'ALLOW', obj=sp)
+        spxLogger.logAction('ADD_SNIP', self.findRequestor(), 'ALLOW', obj=sp)
         mc.disconnect()
 
         return Response(json.dumps(ret), 200, [('Content-Type', 'application/json')])
@@ -92,7 +92,7 @@ class spxSnippetHandler(MethodView):
         ret = {}
 
         if uid is None or key is None:
-            spxLogger.logAction('GET_SNIP', spxSnippetHandler.findRequestor(), 'DENY')
+            spxLogger.logAction('GET_SNIP', self.findRequestor(), 'DENY')
             return Response(json.dumps({'rc': -1, 'error': 'You are not authorized to use this function'}), 403, [('Content-Type', 'application/json')])
 
         mc = getMongo()
@@ -104,20 +104,20 @@ class spxSnippetHandler(MethodView):
                 raise spxException(rc=-1, msg='Decryption failed, please check your key')
 
             if snip.isConfirm:
-                snip.sendConfirmation(spxSnippetHandler.app.config['SMTP_SERVER'], spxSnippetHandler.app.config['MAIL_FROM'], remote_addr=spxSnippetHandler.findRequestor())
+                snip.sendConfirmation(self.app.config['SMTP_SERVER'], self.app.config['MAIL_FROM'], remote_addr=self.findRequestor())
 
             ret = snip
             """ remove the snippet """
             snip.delete()
-            spxLogger.logAction('GET_SNIP', spxSnippetHandler.findRequestor(), 'ALLOW', obj=uid)
+            spxLogger.logAction('GET_SNIP', self.findRequestor(), 'ALLOW', obj=uid)
         except spxException as e:
-            spxLogger.logAction('GET_SNIP', spxSnippetHandler.findRequestor(), 'FAIL', obj=e)
+            spxLogger.logAction('GET_SNIP', self.findRequestor(), 'FAIL', obj=e)
             ret = {'rc': e.rc, 'error': 'Sorry, the snippet you are trying to retrieve does not exist or was already accessed. Please contact the person who sent you the secure snippet so they can re-create the snippet and send you a new link.'}
         except InvalidId:
-            spxLogger.logAction('GET_SNIP', spxSnippetHandler.findRequestor(), 'FAIL', obj=uid)
+            spxLogger.logAction('GET_SNIP', self.findRequestor(), 'FAIL', obj=uid)
             ret = {'rc': -1, 'error': 'The ID you provided is malformed'}
         except Exception as e:
-            spxLogger.logAction('GET_SNIP', spxSnippetHandler.findRequestor(), 'FAIL', obj=e)
+            spxLogger.logAction('GET_SNIP', self.findRequestor(), 'FAIL', obj=e)
             ret = {'rc': -1, 'error': 'Something wrong happenned'}
 
 
@@ -127,10 +127,15 @@ class spxSnippetHandler(MethodView):
 class spxCleanHandler(MethodView):
     decorators = []
 
+    def findRequestor(self):
+        if self.app.config['FORWARDFOR'] == 'True' and request.headers.getlist("X-Forwarded-For"):
+            return request.headers.getlist('X-Forwarded-For')[0]
+        return request.remote_addr
+
     def get(self, password=None):
         ret = {}
         if password is None or password != spxSnippetHandler.app.config['SECRET_KEY']:
-            spxLogger.logAction('CLEAN_SNIP', spxSnippetHandler.findRequestor(), 'DENY')
+            spxLogger.logAction('CLEAN_SNIP', self.findRequestor(), 'DENY')
             return Response(json.dumps({'rc': -1, 'error': 'You are not authorized to use this function'}), 403, [('Content-Type', 'application/json')])
 
         retDays = 30
@@ -145,7 +150,7 @@ class spxCleanHandler(MethodView):
 
         ret['rc'] = 0
         ret['count'] = c_removed
-        spxLogger.logAction('CLEAN_SNIP', spxSnippetHandler.findRequestor(), 'ALLOW', obj=c_removed)
+        spxLogger.logAction('CLEAN_SNIP', self.findRequestor(), 'ALLOW', obj=c_removed)
 
         return Response(json.dumps(ret, cls=spxJSONEncoder), 200, [('Content-Type', 'application/json')])
 
@@ -154,6 +159,7 @@ def init_app(config=None):
     app = Flask(__name__)
 
     spxSnippetHandler.app = app
+    spxCleanHandler.app = app
 
     if config is not None:
         app.config['SECRET_KEY'] = config.get(option='secret')
