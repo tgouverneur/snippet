@@ -130,10 +130,10 @@ class spxSnippet(spxMongoObject):
         self.content = base64.b64encode(iv + cryptbytes)
 
         if len(self.email) > 0:
-            self.email = base64.b64encode(cipher.encrypt(self.email))
+            self.email = base64.b64encode(cipher.encrypt(self.email.encode("utf-8")))
 
         if len(self.reference) > 0:
-            self.reference = base64.b64encode(cipher.encrypt(self.reference))
+            self.reference = base64.b64encode(cipher.encrypt(self.reference.encode("utf-8")))
 
     def decrypt(self, key):
         if len(key) != 32:
