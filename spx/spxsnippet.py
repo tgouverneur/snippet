@@ -94,8 +94,8 @@ class spxSnippet(spxMongoObject):
         if len(mail_from) == 0:
             raise spxException(rc=-5, msg='source email address is not configured')
 
-        text = 'Hello,\n\nHere is your read confirmation for the snippet with refernce: ' + self.reference + '\n'
-        text += 'The IP who has retreived the snippet was: ' + remote_addr + '\n\n'
+        text = 'Hello,\n\nHere is your read confirmation for the snippet with reference: ' + self.reference + '\n'
+        text += 'The IP who has retrieved the snippet was: ' + remote_addr + '\n\n'
         text += 'Best,\n\n--Secure Snippet\n'
         msg = MIMEMultipart()
 
