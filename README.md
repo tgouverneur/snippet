@@ -34,6 +34,7 @@ This allows the destinator of the message to know if he's the only one to read t
     - content: snippet content
     - isRaw: unformatted content (1 or 0)
     - isConfirm: we want a confirmation (1 or 0)
+    - isFile: file upload (1 or 0)
     - reference: reference of the source regarding the snippet
     - email: Email on where to send confirmation
   * Content-type: application/json
