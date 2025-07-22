@@ -60,14 +60,14 @@ class spxSnippet(spxMongoObject):
             self.created = int(time.time())
 
     def __eq__(self, other):
-        if self.id == other.id:
-            return True
-        return False
+        if isinstance(other, spxSnippet):
+            return self.id == other.id
+        return NotImplemented
 
     def __ne__(self, other):
-        if self.id != other.id:
-            return True
-        return False
+        if isinstance(other, spxSnippet):
+            return self.id != other.id
+        return NotImplemented
 
     def __str__(self):
         return str(self.id)
