@@ -52,7 +52,6 @@ def test_encrypt_decrypt():
     assert snip.email == original_email
     assert snip.reference == original_reference
 
-
 def test_findMany_repeated(monkeypatch):
     mc = spxMongo()
     dummy_collection = DummyCollection()
@@ -67,3 +66,4 @@ def test_findMany_repeated(monkeypatch):
 
     assert len(second) == 1
     assert second[0].data == {'v': 1}
+
