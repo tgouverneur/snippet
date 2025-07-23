@@ -10,8 +10,8 @@ from spx.spxsnippet import spxSnippet
 
 def test_encrypt_decrypt():
     original_content = 'hello world'
-    original_email = b'user@example.com'
-    original_reference = b'ref123'
+    original_email = 'user@example.com'
+    original_reference = 'ref123'
 
     snip = spxSnippet(content=original_content)
     snip.email = original_email
@@ -27,5 +27,14 @@ def test_encrypt_decrypt():
     assert snip.decrypt(key) is True
 
     assert snip.content == original_content
-    assert snip.email == original_email.decode()
-    assert snip.reference == original_reference.decode()
+    assert snip.email == original_email
+    assert snip.reference == original_reference
+
+
+def test_strip_file_prefix():
+    """Ensure stripFile removes base64 prefix when isFile is enabled."""
+    data = 'data:text/plain;base64,SGVsbG8='
+    snip = spxSnippet(content=data)
+    snip.isFile = True
+    snip.stripFile()
+    assert snip.content == 'SGVsbG8='
