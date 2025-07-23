@@ -52,6 +52,15 @@ def test_encrypt_decrypt():
     assert snip.email == original_email
     assert snip.reference == original_reference
 
+
+def test_strip_file_prefix():
+    """Ensure stripFile removes base64 prefix when isFile is enabled."""
+    data = 'data:text/plain;base64,SGVsbG8='
+    snip = spxSnippet(content=data)
+    snip.isFile = True
+    snip.stripFile()
+    assert snip.content == 'SGVsbG8='
+
 def test_findMany_repeated(monkeypatch):
     mc = spxMongo()
     dummy_collection = DummyCollection()
