@@ -1,5 +1,6 @@
 import string
-import random
+import secrets
 
 def randString(size=32, chars=string.ascii_letters + string.digits):
-         return ''.join(random.choice(chars) for x in range(size))
+    """Return a cryptographically secure random string."""
+    return ''.join(secrets.choice(chars) for _ in range(size))
