@@ -52,7 +52,6 @@ def test_encrypt_decrypt():
     assert snip.email == original_email
     assert snip.reference == original_reference
 
-
 def test_strip_file_prefix():
     """Ensure stripFile removes base64 prefix when isFile is enabled."""
     data = 'data:text/plain;base64,SGVsbG8='
