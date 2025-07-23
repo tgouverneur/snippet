@@ -109,7 +109,8 @@ class spxMongo(object):
     def count(self, collection, f=None):
         return self.getCollection(collection).count(f)
 
-    def findMany(self, cls=None, collection=None, where={}):
+    def findMany(self, cls=None, collection=None, where=None):
+        where = {} if where is None else where
 
         if cls is None and collection is None:
             raise spxException('findMany(): need at least collection or cls')

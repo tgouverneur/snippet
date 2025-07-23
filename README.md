@@ -77,6 +77,15 @@ $ source bin/activate
 $ pip install -r requirements.txt
 ```
 
+### Running tests
+
+Install test dependencies and execute the suite from the activated virtual environment:
+
+```
+$ pip install pytest
+$ python -m pytest
+```
+
 ### Apache virtualhost
 
 ```
