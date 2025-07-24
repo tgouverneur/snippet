@@ -120,6 +120,8 @@ class spxSnippetHandler(MethodView):
             spxLogger.logAction('GET_SNIP', self.findRequestor(), 'FAIL', obj=e)
             ret = {'rc': -1, 'error': 'Something wrong happenned'}
 
+        finally:
+            mc.disconnect()
 
         return Response(json.dumps(ret, cls=spxJSONEncoder), 200, [('Content-Type', 'application/json')])
 
@@ -151,6 +153,8 @@ class spxCleanHandler(MethodView):
         ret['rc'] = 0
         ret['count'] = c_removed
         spxLogger.logAction('CLEAN_SNIP', self.findRequestor(), 'ALLOW', obj=c_removed)
+
+        mc.disconnect()
 
         return Response(json.dumps(ret, cls=spxJSONEncoder), 200, [('Content-Type', 'application/json')])
 
