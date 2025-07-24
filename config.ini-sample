@@ -5,17 +5,16 @@ file_log: /home/tgouverneur/git/snippet/logs/audit.log
 listen_port: 7080
 listen_host: 0.0.0.0
 debug_mode: True
-smtpServer: smtp.vpn.espix.org
-destAddress: thomas@espix.net
-licensedStore: /home/tgo/efsSnippet/store
+destaddress: thomas@espix.net
+licensedstore: /home/tgo/efsSnippet/store
 
-mongoHost: localhost
-mongoPort: 27017
-mongoUsername: snippet
-mongoPassword: snippetPass
-mongoDatabase: snippet
+mongohost: localhost
+mongoport: 27017
+mongousername: snippet
+mongopassword: snippetPass
+mongodatabase: snippet
 
-smtpServer: smtp.test.com
-mailFrom: snippet@test.com
+smtpserver: smtp.test.com
+mailfrom: snippet@test.com
 
-useForwardFor: True
+useforwardfor: True
